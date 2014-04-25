@@ -1,52 +1,27 @@
 <!doctype html>
+
 <html ng-app="myApp">
   <head>
-
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+    <script src="js/vendor/custom.modernizr.js"></script>
+    <script src="js/vendor/angular.min.js"></script>
     <script src="js/main.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <link rel="stylesheet" type="text/css" href="css/normalize.css" />
+    <link rel="stylesheet" type="text/css" href="css/foundation.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/styles.css"/>
 
   </head>
   <body>
     <section>
-      <input type="text" ng-model="yourName" placeholder="Enter a name here">
-      <h1>Hello, {{ yourName }}!</h1>
-      <p>You've been greeted by {{name}}</p>
-
-      <hr>
-
-      <div ng-controller="MyController">
-        <input type="text" ng-model="person.name" placeholder="Enter your name" />
-        <h1>Hello {{ person.name }}</h1>
-        <p>{{ clock }}</p>
-      </div>
-
-      <hr>
-
-      <div ng-controller="DemoController">
-        <h1>The simplest adding machine ever</h1>
-        <button ng-click="add(1)" class="button">Add</button>
-        <button ng-click="subtract(1)" class="button">Subtract</button>
-        <p>Current count: {{ counter }}</p>
-      </div>
-
-      <hr>
-
-      <div ng-controller="PlayerController">
-        <h1>Playing audio:</h1>
-        <p>{{ playing }}</p>
-        <button ng-click="play()" class="button" ng-show="!playing">Play</button>
-        <button ng-click="stop()" class="button alert" ng-show="playing">Stop</button>
-      </div>
-
-      <hr>
-
       <h1>NPR Player</h1>
       <div ng-controller="PlayerController">
-        {{ programs }}
+        <ul id="programs_list" class="">
+          <li ng-repeat="program in programs" ng-click="play(program)">
+          <button npr-link play='play(program)' ng-model="program"></button>
+          </li>
+        </ul>
       </div>
-
     </section>
   </body>
 </html>
