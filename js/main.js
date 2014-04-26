@@ -7,32 +7,6 @@ app.factory('audio', ['$document', function($document) {
   return audio;
 }]);
 
-app.factory('player', ['audio', function(audio) {
-  var player = {
-    playing: false,
-    current: null,
-    ready: false,
-
-    play: function(program) {
-      if (player.playing) player.stop();
-      var url = program.audio[0].format.mp4.$text;
-      player.current = program;
-      audio.src = url;
-      audio.play();
-      player.playing = true
-    },
-
-    stop: function() {
-      if (player.playing) {
-        audio.pause();
-        player.ready = player.playing = false;
-        player.current = null;
-      }
-    }
-  };
-  return player;
-}]);
-
 app.directive('nprLink', function() {
   return {
     restrict: 'EA',
@@ -49,19 +23,19 @@ app.directive('nprLink', function() {
   }
 });
 
-app.controller('PlayerController', ['$scope', '$http', 'audio',
+app.controller('PlayerController', function($scope, $http) {
   function($scope, $http, audio) {
-  $scope.audio = audio;
+    $scope.audio = audio;
 
-
-  audio.src = 'http://pd.npr.org/npr-mp4/npr/sf/2013/07/20130726_sf_05.mp4?orgId=1&topicId=1032&ft=3&f=61';
-  audio.play();
+  // audio.src = 'http://pd.npr.org/npr-mp4/npr/sf/2013/07/20130726_sf_05.mp4?orgId=1&topicId=1032&ft=3&f=61';
+  // audio.play();
 
   $scope.play = function(program) {
-    if ($scope.playing) $scope.audio.pause();
+    if ($scope.playing) audio.pause();
     var url = program.audio[0].format.mp4.$text;
     audio.src = url;
     audio.play();
+    // Store the state of the player as playing
     $scope.playing = true;
   }
 
@@ -69,12 +43,24 @@ app.controller('PlayerController', ['$scope', '$http', 'audio',
     method: 'JSONP',
     url: nprUrl + '&apiKey=' + apiKey + '&callback=JSON_CALLBACK'
   }).success(function(data, status) {
+    // Now we have a list of the stories (data.list.story)
+    // in the data object that the NPR API 
+    // returns in JSON that looks like:
+    // data: { "list": {
+    //   "title": ...
+    //   "story": [
+    //     { "id": ...
+    //       "title": ...
     $scope.programs = data.list.story;
   }).error(function(data, status) {
     // Some error occurred
   });
 
-}]);
+});
 
-app.controller('RelatedController', ['$scope', function($scope) {
-}]);
+app.controller('RelatedController', function($scope) {
+});
+
+// Parent scope
+app.controller('FrameController', function($scope) {
+});
